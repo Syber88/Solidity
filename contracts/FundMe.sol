@@ -10,12 +10,17 @@ contract FundMe {
         require(getConversionRate(msg.value) >= minimumUsd, "didn't send enough eth"); 
 
     }
+    function getVersion() public view returns (uint256) {
+        AggregatorV3Interface priceFeed = AggregatorV3Interface(0x694AA1769357215DE4FAC081bf1f309aDC325306);
+        return priceFeed.version();
+    }
 
     // function withdraw ()
     function getPrice() public view returns (uint256)  {
         // address 0x694AA1769357215DE4FAC081bf1f309aDC325306
         AggregatorV3Interface priceFeed = AggregatorV3Interface(0x694AA1769357215DE4FAC081bf1f309aDC325306);
         (,int256 price,,,) = priceFeed.latestRoundData();
+        require (price > 0, "price should be valid");
         return uint256(price * 1e10);
     }
 
